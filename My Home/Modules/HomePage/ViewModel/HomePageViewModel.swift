@@ -9,36 +9,20 @@ import Foundation
 
 class HomePageViewModel {
     
-    static let shared = HomePageViewModel()
-    
     var devicesArray: [Device] = []
     var lightsArray: [Light] = []
     var heatersArray: [Heater] = []
     var rollerShuttersArray: [RollerShutter] = []
     
-    private let url = URL(string: "http://storage42.com/modulotest/data.json")
+    private let loadingService = LoadingService()
     
-    func fetchData(completion: @escaping(() -> ())) {
+    func loadData(completion: @escaping(() -> ())) {
         
-        let task = URLSession.shared.dataTask(with: url!) {(data,
-                                                            response,
-                                                            error) in
-            
-            guard let data = data else { return }
-            self.devicesArray.removeAll()
-            var indexForAppend = 0
-            let jsonDecoder = JSONDecoder()
-            let decodedData = try? jsonDecoder.decode(ResponceData.self,
-                                                      from: data.self)
-            for _ in decodedData!.devices {
-                self.devicesArray.append(decodedData!.devices[indexForAppend])
-                indexForAppend += 1
-            }
-            indexForAppend = 0
+        loadingService.fetchData(completion: { devices in
+            self.devicesArray = devices
             DispatchQueue.main.async {
                 completion()
             }
-        }
-        task.resume()
+        })
     }
 }

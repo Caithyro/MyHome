@@ -9,9 +9,8 @@ import UIKit
 
 class ControlPageViewController: UIViewController {
     
-    var controlPageViewModel = ControlPageViewModel.shared
-    
-    private var homePageViewModel = HomePageViewModel.shared
+    var controlPageViewModel: ControlPageViewModel!
+    var homePageViewModel: HomePageViewModel!
     
     weak var delegate: HomePageViewController?
     
@@ -37,8 +36,8 @@ class ControlPageViewController: UIViewController {
         view = UIView()
         view.backgroundColor = .systemBackground
         
-        addDeviceImageView()
-        addDeviceLabel()
+        createDeviceImageView()
+        createDeviceLabel()
         
         switch controlPageViewModel.targetDeviceType {
         case deviceLightString:
@@ -48,11 +47,11 @@ class ControlPageViewController: UIViewController {
         case deviceRollerShutterString:
             addRollerShutterControls()
         default:
-            print(errorUnknownDeviceString)
+            print(NSLocalizedString("l.errorUnknownDeviceString", comment: ""))
         }
     }
     
-    private func addDeviceImageView() {
+    private func createDeviceImageView() {
         
         let topSpacing = 96
         view.addSubview(deviceImageView)
@@ -63,7 +62,7 @@ class ControlPageViewController: UIViewController {
         setDeviceImageAndText()
     }
     
-    private func addDeviceLabel() {
+    private func createDeviceLabel() {
         
         let topSpacing = 16
         view.addSubview(deviceLabel)
@@ -77,7 +76,7 @@ class ControlPageViewController: UIViewController {
     private func createDeviceSwitch() {
         
         let topSpacing = 16
-        let leftSpacing = 16
+        let leftSpacing = 8
         view.addSubview(deviceSwitch)
         deviceSwitch.translatesAutoresizingMaskIntoConstraints = false
         deviceSwitch.topAnchor.constraint(equalTo: deviceLabel.bottomAnchor,
@@ -89,11 +88,11 @@ class ControlPageViewController: UIViewController {
     
     private func createOnOffAnnotationLabel(deviceName: String) {
         
-        let fontSize = 11
+        let fontSize = 10
         let topSpacing = 56
-        let leftSpacing = 16
+        let leftSpacing = 8
         view.addSubview(onOffAnnotationLabel)
-        onOffAnnotationLabel.text = onOffLabelString + " " + deviceName
+        onOffAnnotationLabel.text = NSLocalizedString("l.onOffLabelString", comment: "") + " " + deviceName
         onOffAnnotationLabel.textColor = .systemGray
         onOffAnnotationLabel.font = .systemFont(ofSize: CGFloat(fontSize))
         onOffAnnotationLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -105,19 +104,19 @@ class ControlPageViewController: UIViewController {
     
     private func createExplanationAnnotationLabel(device: String) {
         
-        let fontSize = 11
+        let fontSize = 10
         let topSpacing = 56
-        let rightSpacing = -16
+        let rightSpacing = -8
         view.addSubview(explanationAnnotationLabel)
         switch device {
         case deviceLightString:
-            explanationAnnotationLabel.text = explanationAnnotationLabelStringLight
+            explanationAnnotationLabel.text = NSLocalizedString("l.explanationAnnotationLabelStringLight", comment: "")
         case deviceHeaterString:
-            explanationAnnotationLabel.text = explanationAnnotationLabelStringHeater
+            explanationAnnotationLabel.text = NSLocalizedString("l.explanationAnnotationLabelStringHeater", comment: "")
         case deviceRollerShutterString:
-            explanationAnnotationLabel.text = explanationAnnotationLabelStringRollerShutter
+            explanationAnnotationLabel.text = NSLocalizedString("l.explanationAnnotationLabelStringRollerShutter", comment: "")
         default:
-            print(errorUnknownDeviceString)
+            print(NSLocalizedString("l.deviceUnknownString", comment: ""))
         }
         explanationAnnotationLabel.textColor = .systemGray
         explanationAnnotationLabel.font = .systemFont(ofSize: CGFloat(fontSize))
@@ -142,8 +141,8 @@ class ControlPageViewController: UIViewController {
     private func addLightsControls() {
         
         let topSpacing = 16
-        let leftSpacing = 16
-        let rightSpacing = -16
+        let leftSpacing = 8
+        let rightSpacing = -8
         let targetDevice = controlPageViewModel.lightsArray.filter
         { $0.id == controlPageViewModel.targetDeviceID }
         createDeviceSwitch()
@@ -157,7 +156,7 @@ class ControlPageViewController: UIViewController {
                                             constant: CGFloat(leftSpacing)).isActive = true
         controlSlider.rightAnchor.constraint(equalTo: view.rightAnchor,
                                              constant: CGFloat(rightSpacing)).isActive = true
-
+        
         if targetDevice.first!.mode == deviceModeOffString {
             controlSlider.isHidden = true
             deviceSwitch.isOn = false
@@ -174,7 +173,7 @@ class ControlPageViewController: UIViewController {
         let targetDevice = controlPageViewModel.heatersArray.filter
         { $0.id == controlPageViewModel.targetDeviceID }
         let topSpacing = 16
-        let rightSpacing = -16
+        let rightSpacing = -8
         let minValue = 7
         let maxValue = 28
         let stepValue = 0.5
@@ -228,41 +227,51 @@ class ControlPageViewController: UIViewController {
         case deviceLightString:
             let targetDevice = controlPageViewModel.lightsArray.filter
             { $0.id == controlPageViewModel.targetDeviceID }
-            let lightDeviceIsText = targetDevice.first!.deviceName + " " + isString + " "
+            let lightDeviceIsText = targetDevice.first!.deviceName + " " + NSLocalizedString("l.isString",
+                                                                                             comment: "") + " "
             if targetDevice.first?.mode == deviceModeOnString {
                 deviceImageView.image = UIImage(named: "DeviceLightOnIcon")!
-                deviceLabel.text = lightDeviceIsText + targetDevice.first!.mode! + " " + atString + " " + String(
-                    describing: (targetDevice.first!.intensity ?? 0)) + percentString
+                deviceLabel.text = lightDeviceIsText + NSLocalizedString("l.deviceModeOnString",
+                                                                         comment: "") + " " + NSLocalizedString("l.atString",
+                                                                                                                comment: "") + " " + String(
+                                                                                                                    describing: (targetDevice.first!.intensity ?? 0)) + percentString
             } else {
                 deviceImageView.image = UIImage(named: "DeviceLightOffIcon")!
-                deviceLabel.text = lightDeviceIsText + targetDevice.first!.mode!
+                deviceLabel.text = lightDeviceIsText + NSLocalizedString("l.deviceModeOffString",
+                                                                         comment: "")
             }
         case "Heater":
             let targetDevice = controlPageViewModel.heatersArray.filter
             { $0.id == controlPageViewModel.targetDeviceID }
-            let heaterDeviceIsText = targetDevice.first!.deviceName + " " + isString + " "
+            let heaterDeviceIsText = targetDevice.first!.deviceName + " " + NSLocalizedString("l.isString",
+                                                                                              comment: "") + " "
             if targetDevice.first?.mode == deviceModeOnString {
                 deviceImageView.image = UIImage(named: "DeviceHeaterOnIcon")!
-                deviceLabel.text = heaterDeviceIsText + targetDevice.first!.mode! + " " + atString + String(
-                    describing: (targetDevice.first!.temperature ?? 0)) + celsiusDegreeString
+                deviceLabel.text = heaterDeviceIsText + NSLocalizedString("l.deviceModeOnString",
+                                                                          comment: "") + " " + NSLocalizedString("l.atString", comment: "") + " " + String(
+                                                                            describing: (targetDevice.first!.temperature ?? 0)) + celsiusDegreeString
             } else {
                 deviceImageView.image = UIImage(named: "DeviceHeaterOffIcon")!
-                deviceLabel.text = heaterDeviceIsText + targetDevice.first!.mode!
+                deviceLabel.text = heaterDeviceIsText + NSLocalizedString("l.deviceModeOffString",
+                                                                          comment: "")
             }
         case "RollerShutter":
             let targetDevice = controlPageViewModel.rollerShuttersArray.filter
             { $0.id == controlPageViewModel.targetDeviceID }
-            let rollerShutterDeviceIsText = targetDevice.first!.deviceName + " " + isString + " "
+            let rollerShutterDeviceIsText = targetDevice.first!.deviceName + " " + NSLocalizedString("l.isString",
+                                                                                                     comment: "") + " "
             if targetDevice.first?.position == 0 {
-                deviceImageView.image = UIImage(named: "DeviceRollerShutterIcon")!
-                deviceLabel.text = rollerShutterDeviceIsText + deviceStateClosedString
+                deviceImageView.image = UIImage(named: "DeviceRollerShutterClosedIcon")!
+                deviceLabel.text = rollerShutterDeviceIsText + NSLocalizedString("l.deviceStateClosedString",
+                                                                                 comment: "")
             } else {
-                deviceImageView.image = UIImage(named: "DeviceRollerShutterIcon")!
-                deviceLabel.text = rollerShutterDeviceIsText + deviceStateOpenedString + " " + atString + " " + String(
-                    describing: (targetDevice.first!.position ?? 0)) + percentString
+                deviceImageView.image = UIImage(named: "DeviceRollerShutterOpenIcon")!
+                deviceLabel.text = rollerShutterDeviceIsText + NSLocalizedString("l.deviceStateOpenedString",
+                                                                                 comment: "") + " " + NSLocalizedString("l.atString", comment: "") + " " + String(
+                                                                                    describing: (targetDevice.first!.position ?? 0)) + percentString
             }
         default:
-            print(errorUnknownDeviceString)
+            print(NSLocalizedString("l.errorUnknownDeviceString", comment: ""))
         }
     }
     
@@ -274,29 +283,36 @@ class ControlPageViewController: UIViewController {
         switch targetDevice.first?.productType {
         case .light:
             let setIntensity = Int(sender.value)
-            let deviceLabelTextFirstPart = targetDevice.first!.deviceName + " " + isString
-            let deviceLabelTextSecondPart = targetDevice.first!.mode! + " " + atString + " " + String(
-                describing: setIntensity) + percentString
+            let deviceLabelTextFirstPart = targetDevice.first!.deviceName + " " + NSLocalizedString("l.isString", comment: "")
+            let deviceLabelTextSecondPart = NSLocalizedString("l.deviceModeOnString",
+                                                              comment: "") + " " + NSLocalizedString("l.atString",
+                                                                                                     comment: "") + " " + String(
+                                                                                                        describing: setIntensity) + percentString
             deviceLabel.text = deviceLabelTextFirstPart + " " + deviceLabelTextSecondPart
             targetDevice.first?.intensity = setIntensity
             homePageViewModel.lightsArray.removeAll()
         case .rollerShutter:
             let setPosition = Int(sender.value)
-            let deviceLabelTextFirstPart = targetDevice.first!.deviceName + " " + isString
+            let deviceLabelTextFirstPart = targetDevice.first!.deviceName + " " + NSLocalizedString("l.isString",
+                                                                                                    comment: "")
             var deviceLabelTextSecondPart = String()
             if setPosition == 0 {
-                deviceLabelTextSecondPart = deviceStateClosedString
+                deviceLabelTextSecondPart = NSLocalizedString("l.deviceStateClosedString", comment: "")
+                deviceImageView.image = UIImage(named: "DeviceRollerShutterClosedIcon")
             } else {
-                deviceLabelTextSecondPart = deviceStateOpenedString + " " + atString + " " + String(
-                    describing: setPosition) + percentString
+                deviceLabelTextSecondPart = NSLocalizedString("l.deviceStateOpenedString",
+                                                              comment: "") + " " + NSLocalizedString("l.atString",
+                                                                                                     comment: "") + " " + String(
+                                                                                                        describing: setPosition) + percentString
+                deviceImageView.image = UIImage(named: "DeviceRollerShutterOpenIcon")
             }
             deviceLabel.text = deviceLabelTextFirstPart + " " + deviceLabelTextSecondPart
             targetDevice.first?.position = setPosition
             homePageViewModel.rollerShuttersArray.removeAll()
         case .heater:
-            print(errorNoSliderFoundString)
+            print(NSLocalizedString("l.errorNoSliderFoundString", comment: ""))
         case .none:
-            print(errorUnknownDeviceString)
+            print(NSLocalizedString("l.errorUnknownDeviceString", comment: ""))
         }
         self.delegate?.homePageTableView.reloadData()
     }
@@ -308,43 +324,50 @@ class ControlPageViewController: UIViewController {
         
         switch targetDevice.first?.productType {
         case .light:
-            let lightDeviceIsText = targetDevice.first!.deviceName + " " + isString + " "
+            let lightDeviceIsText = targetDevice.first!.deviceName + " " + NSLocalizedString("l.isString",
+                                                                                             comment: "") + " "
             if sender.isOn == true {
                 targetDevice.first?.mode = deviceModeOnString
                 deviceImageView.image = UIImage(named: "DeviceLightOnIcon")!
-                deviceLabel.text = lightDeviceIsText + targetDevice.first!.mode! + " " + atString + " " + String(
-                    describing: (targetDevice.first!.intensity ?? 0)) + percentString
+                deviceLabel.text = lightDeviceIsText + NSLocalizedString("l.deviceModeOnString",
+                                                                         comment: "") + " " + NSLocalizedString("l.atString",
+                                                                                                                comment: "") + " " + String(
+                                                                                                                    describing: (targetDevice.first!.intensity ?? 0)) + percentString
                 controlSlider.isHidden = false
                 explanationAnnotationLabel.isHidden = false
             } else {
                 targetDevice.first?.mode = deviceModeOffString
                 deviceImageView.image = UIImage(named: "DeviceLightOffIcon")!
-                deviceLabel.text = lightDeviceIsText + targetDevice.first!.mode!
+                deviceLabel.text = lightDeviceIsText + NSLocalizedString("l.deviceModeOffString",
+                                                                         comment: "")
                 controlSlider.isHidden = true
                 explanationAnnotationLabel.isHidden = true
             }
             homePageViewModel.lightsArray.removeAll()
         case .rollerShutter:
-            print(errorNoSwitchFoundString)
+            print(NSLocalizedString("l.errorNoSwitchFoundString", comment: ""))
         case .heater:
-            let heaterDeviceIsText = targetDevice.first!.deviceName + " " + isString + " "
+            let heaterDeviceIsText = targetDevice.first!.deviceName + " " + NSLocalizedString("l.isString",
+                                                                                              comment: "") + " "
             if sender.isOn == true {
                 targetDevice.first?.mode = deviceModeOnString
                 deviceImageView.image = UIImage(named: "DeviceHeaterOnIcon")
-                deviceLabel.text = heaterDeviceIsText + targetDevice.first!.mode! + " " + atString + " " + String(
-                    describing: (targetDevice.first!.temperature ?? 0)) + celsiusDegreeString
+                deviceLabel.text = heaterDeviceIsText + NSLocalizedString("l.deviceModeOnString",
+                                                                          comment: "") + " " + NSLocalizedString("l.atString", comment: "") + " " + String(
+                                                                            describing: (targetDevice.first!.temperature ?? 0)) + celsiusDegreeString
                 heaterStepper.isHidden = false
                 explanationAnnotationLabel.isHidden = false
             } else {
                 targetDevice.first?.mode = deviceModeOffString
                 deviceImageView.image = UIImage(named: "DeviceHeaterOffIcon")!
-                deviceLabel.text = heaterDeviceIsText + targetDevice.first!.mode!
+                deviceLabel.text = heaterDeviceIsText + NSLocalizedString("l.deviceModeOffString",
+                                                                          comment: "")
                 heaterStepper.isHidden = true
                 explanationAnnotationLabel.isHidden = true
             }
             homePageViewModel.heatersArray.removeAll()
         case .none:
-            print(errorUnknownDeviceString)
+            print(NSLocalizedString("l.errorUnknownDeviceString", comment: ""))
         }
         self.delegate?.homePageTableView.reloadData()
     }
@@ -354,10 +377,13 @@ class ControlPageViewController: UIViewController {
         let targetDevice = homePageViewModel.devicesArray.filter
         { $0.id == controlPageViewModel.targetDeviceID }
         let setTemperature = Int(sender.value)
-        let heaterStepperIsText = targetDevice.first!.deviceName + " " + isString + " "
+        let heaterStepperIsText = targetDevice.first!.deviceName + " " + NSLocalizedString("l.isString",
+                                                                                           comment: "") + " "
         targetDevice.first?.temperature = Int(setTemperature)
-        deviceLabel.text = heaterStepperIsText + targetDevice.first!.mode! + " " + atString + " " + String(
-            describing: setTemperature) + celsiusDegreeString
+        deviceLabel.text = heaterStepperIsText + NSLocalizedString("l.deviceModeOnString",
+                                                                   comment: "") + " " + NSLocalizedString("l.atString",
+                                                                                                          comment: "") + " " + String(
+                                                                                                            describing: setTemperature) + celsiusDegreeString
         homePageViewModel.heatersArray.removeAll()
         self.delegate?.homePageTableView.reloadData()
     }

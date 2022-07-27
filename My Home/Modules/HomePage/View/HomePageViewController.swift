@@ -11,7 +11,8 @@ class HomePageViewController: UIViewController {
     
     let homePageTableView = UITableView.init(frame: .zero,
                                              style: .insetGrouped)
-    let homePageViewModel = HomePageViewModel.shared
+    let homePageViewModel = HomePageViewModel()
+    let controlPageViewModel = ControlPageViewModel()
     
     override func viewDidLoad() {
         
@@ -41,7 +42,7 @@ class HomePageViewController: UIViewController {
                                                     view.rightAnchor).isActive = true
         homePageTableView.bottomAnchor.constraint(equalTo:
                                                     view.bottomAnchor).isActive = true
-        homePageViewModel.fetchData {
+        homePageViewModel.loadData {
             self.homePageTableView.reloadData()
         }
         self.homePageTableView.register(HomePageTableViewCell.self,
@@ -63,7 +64,8 @@ extension HomePageViewController: UITableViewDataSource {
         let cell = self.homePageTableView.dequeueReusableCell(withIdentifier:
                                                                 String(describing: HomePageTableViewCell.self),
                                                               for: indexPath) as! HomePageTableViewCell
-        cell.deviceItem.append(homePageViewModel.devicesArray[indexPath.row])
+        cell.deviceItem = homePageViewModel.devicesArray[indexPath.row]
+        cell.homePageViewModel = homePageViewModel
         cell.configureCell()
         return cell
     }
@@ -77,6 +79,8 @@ extension HomePageViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let controlPage = ControlPageViewController()
+        controlPage.controlPageViewModel = self.controlPageViewModel
+        controlPage.homePageViewModel = self.homePageViewModel
         controlPage.controlPageViewModel.targetDeviceID = homePageViewModel.devicesArray[indexPath.row].id
         
         switch homePageViewModel.devicesArray[indexPath.row].productType {

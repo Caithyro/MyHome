@@ -1,0 +1,29 @@
+/* 
+ Localizable.strings
+ My Home
+ 
+ Created by Дмитрий Куприенко on 27.07.2022.
+ 
+ */
+
+"l.errorUnknownDeviceString" = "Error: Unknown device";
+"l.errorNoSliderFoundString" = "Error: No slider found";
+"l.errorNoSwitchFoundString" = "Error: No switch found";
+"l.errorSomethingWentWrongString" = "Error: Something went wrong, check console";
+
+"l.deviceUnknownString" = "Unknown";
+"l.deviceLightString" = "Light";
+"l.deviceHeaterString" = "Heater";
+"l.deviceRollerShutterString" = "RollerShutter";
+
+"l.deviceModeOnString" = "ON";
+"l.deviceModeOffString" = "OFF";
+"l.deviceStateOpenedString" = "opened";
+"l.deviceStateClosedString" = "closed";
+
+"l.onOffLabelString" = "On/Off";
+"l.explanationAnnotationLabelStringLight" = "Drag to set intensity";
+"l.explanationAnnotationLabelStringHeater" = "Step is 0.5°C";
+"l.explanationAnnotationLabelStringRollerShutter" = "Drag to set position";
+"l.isString" = "is";
+"l.atString" = "at";

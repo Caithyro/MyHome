@@ -9,13 +9,15 @@ import UIKit
 
 class HomePageTableViewCell: UITableViewCell {
     
-    var deviceItem = [Device]()
+    var deviceItem: Device?
     
-    private var homePageViewModel = HomePageViewModel.shared
+    var homePageViewModel: HomePageViewModel!
     private var textForLights = String()
     private var textForHeater = String()
     private var textForRollerShutter = String()
+    private var deviceImageView = UIImageView()
     private var deviceImage = UIImage()
+    private var deviceLabel = UILabel()
     
     override func awakeFromNib() {
         
@@ -30,102 +32,135 @@ class HomePageTableViewCell: UITableViewCell {
     func configureCell() {
         
         createTextAndAssingImage()
-        switch deviceItem.first?.productType {
+        switch deviceItem?.productType {
         case .light:
             configureLightCell()
         case .heater:
             configureHeaterCell()
         case .rollerShutter:
             configureRollerShutterCell()
-        default:
-            print(errorUnknownDeviceString)
+        case .none:
+            print(NSLocalizedString("l.errorUnknownDeviceString", comment: ""))
         }
         
     }
     
     //MARK: - Private
     
+    private func createImageView() {
+        
+        let defaultSpacing = 8
+        let defaultSize = 30
+        self.addSubview(deviceImageView)
+        self.deviceImageView.translatesAutoresizingMaskIntoConstraints = false
+        self.deviceImageView.heightAnchor.constraint(equalToConstant: CGFloat(defaultSize)).isActive = true
+        self.deviceImageView.widthAnchor.constraint(equalToConstant: CGFloat(defaultSize)).isActive = true
+        self.deviceImageView.topAnchor.constraint(equalTo: self.topAnchor,
+                                                  constant: CGFloat(defaultSpacing)).isActive = true
+        self.deviceImageView.leftAnchor.constraint(equalTo: self.leftAnchor,
+                                                   constant: CGFloat(defaultSpacing)).isActive = true
+    }
+    
+    private func createDeviceLabel() {
+        
+        let defaultSpacing = 8
+        let fontSize = 15
+        self.addSubview(deviceLabel)
+        self.deviceLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.deviceLabel.topAnchor.constraint(equalTo: self.topAnchor,
+                                              constant: CGFloat(defaultSpacing)).isActive = true
+        self.deviceLabel.leftAnchor.constraint(equalTo: deviceImageView.rightAnchor,
+                                               constant: CGFloat(defaultSpacing)).isActive = true
+        self.deviceLabel.font = .systemFont(ofSize: CGFloat(fontSize))
+    }
+    
     private func configureLightCell() {
         
-        self.imageView?.image = deviceImage
-        self.textLabel?.text = textForLights
-        self.textLabel?.numberOfLines = 0
-        let lightDevice = Light(id: deviceItem.first?.id ?? 0,
-                                deviceName: deviceItem.first?.deviceName ?? deviceUnknownString,
-                                intensity: deviceItem.first?.intensity ?? 0,
-                                mode: deviceItem.first?.mode ?? deviceModeOffString,
-                                productType: deviceItem.first?.productType ?? .light)
+        createImageView()
+        createDeviceLabel()
+        self.deviceImageView.image = deviceImage
+        self.deviceLabel.text = textForLights
+        self.deviceLabel.numberOfLines = 0
+        let lightDevice = Light(id: deviceItem!.id,
+                                deviceName: deviceItem!.deviceName,
+                                intensity: deviceItem!.intensity ?? 0,
+                                mode: deviceItem!.mode ?? NSLocalizedString("l.deviceModeOffString", comment: ""),
+                                productType: deviceItem!.productType)
         homePageViewModel.lightsArray.append(lightDevice)
-        deviceItem.removeAll()
     }
     
     private func configureHeaterCell() {
         
-        self.imageView?.image = deviceImage
-        self.textLabel?.text = textForHeater
-        self.textLabel?.numberOfLines = 0
-        let heaterDevice = Heater(id: deviceItem.first?.id ?? 0,
-                                  deviceName: deviceItem.first?.deviceName ?? deviceUnknownString,
-                                  temperature: deviceItem.first?.temperature ?? 0,
-                                  mode: deviceItem.first?.mode ?? deviceModeOffString,
-                                  productType: deviceItem.first?.productType ?? .heater)
+        createImageView()
+        createDeviceLabel()
+        self.deviceImageView.image = deviceImage
+        self.deviceLabel.text = textForHeater
+        self.deviceLabel.numberOfLines = 0
+        let heaterDevice = Heater(id: deviceItem!.id,
+                                  deviceName: deviceItem!.deviceName,
+                                  temperature: deviceItem!.temperature ?? 0,
+                                  mode: deviceItem!.mode ?? NSLocalizedString("l.deviceModeOffString", comment: ""),
+                                  productType: deviceItem!.productType)
         homePageViewModel.heatersArray.append(heaterDevice)
-        deviceItem.removeAll()
     }
     
     private func configureRollerShutterCell() {
         
-        self.imageView?.image = deviceImage
-        self.textLabel?.text = textForRollerShutter
-        self.textLabel?.numberOfLines = 0
-        let rollerShutterDevice = RollerShutter(id: deviceItem.first?.id ?? 0,
-                                                deviceName: deviceItem.first?.deviceName ?? deviceUnknownString,
-                                                position: deviceItem.first?.position ?? 0,
-                                                productType: deviceItem.first?.productType ?? .rollerShutter)
+        createImageView()
+        createDeviceLabel()
+        self.deviceImageView.image = deviceImage
+        self.deviceLabel.text = textForRollerShutter
+        self.deviceLabel.numberOfLines = 0
+        let rollerShutterDevice = RollerShutter(id: deviceItem!.id,
+                                                deviceName: deviceItem!.deviceName,
+                                                position: deviceItem!.position ?? 0,
+                                                productType: deviceItem!.productType)
         homePageViewModel.rollerShuttersArray.append(rollerShutterDevice)
-        deviceItem.removeAll()
     }
     
     private func createTextAndAssingImage() {
         
-        switch deviceItem.first?.productType {
+        switch deviceItem!.productType {
         case  .light:
-            if deviceItem.first!.mode == deviceModeOffString {
-                textForLights = deviceItem.first!.deviceName + " " + isString + " " + deviceModeOffString
-                deviceImage = UIImage(systemName: "lightbulb")!
+            if deviceItem!.mode == deviceModeOffString {
+                textForLights = deviceItem!.deviceName + " " + NSLocalizedString("l.isString",
+                                                                                 comment: "") + " " + NSLocalizedString("l.deviceModeOffString", comment: "")
+                deviceImage = UIImage(named: "DeviceLightOffIcon")!
             } else {
-                let textForLightsFirstPart = deviceItem.first!.deviceName + " " + isString + " " + (deviceItem.first!.mode
-                                                                                                   ?? deviceUnknownString)
-                let textForLightsSecondPart = atString + " " + String(describing: (deviceItem.first!.intensity
-                                                                                   ?? 0)) + percentString
+                let textForLightsFirstPart = deviceItem!.deviceName + " " + NSLocalizedString("l.isString",
+                                                                                              comment: "") + " " + NSLocalizedString("l.deviceModeOnString", comment: "")
+                let textForLightsSecondPart = NSLocalizedString("l.atString",
+                                                                comment: "") + " " + String(describing: (deviceItem!.intensity
+                                                                                                         ?? 0)) + percentString
                 textForLights = textForLightsFirstPart + " " + textForLightsSecondPart
-                deviceImage = UIImage(systemName: "lightbulb.fill")!
+                deviceImage = UIImage(named: "DeviceLightOnIcon")!
             }
         case .heater:
-            if deviceItem.first!.mode == deviceModeOffString {
-                textForHeater = deviceItem.first!.deviceName + " " + isString + " " + deviceModeOffString
-                deviceImage = UIImage(systemName: "thermometer.snowflake")!
+            if deviceItem!.mode == deviceModeOffString {
+                textForHeater = deviceItem!.deviceName + " " + NSLocalizedString("l.isString",
+                                                                                 comment: "") + " " + NSLocalizedString("l.deviceModeOffString", comment: "")
+                deviceImage = UIImage(named: "DeviceHeaterOffIcon")!
             } else {
-                let textForHeaterFirstPart = deviceItem.first!.deviceName + " " + isString + " " + (deviceItem.first!.mode
-                                                                                                   ?? deviceUnknownString)
-                let textForHeaterSecondPart = atString + " " + String(describing: (deviceItem.first!.temperature
-                                                                                   ?? 0)) + celsiusDegreeString
+                let textForHeaterFirstPart = deviceItem!.deviceName + " " + NSLocalizedString("l.isString",
+                                                                                              comment: "") + " " + NSLocalizedString("l.deviceModeOnString", comment: "")
+                let textForHeaterSecondPart = NSLocalizedString("l.atString", comment: "") + " " + String(describing: (deviceItem!.temperature
+                                                                                                                       ?? 0)) + celsiusDegreeString
                 textForHeater = textForHeaterFirstPart + " " + textForHeaterSecondPart
-                deviceImage = UIImage(systemName: "thermometer.sun.fill")!
+                deviceImage = UIImage(named: "DeviceHeaterOnIcon")!
             }
         case .rollerShutter:
-            if deviceItem.first!.position == 0 {
-                textForRollerShutter = deviceItem.first!.deviceName + " " + isString + " " + deviceStateClosedString
-                deviceImage = UIImage(systemName: "rectangle.tophalf.filled")!
+            if deviceItem!.position == 0 {
+                textForRollerShutter = deviceItem!.deviceName + " " + NSLocalizedString("l.isString",
+                                                                                        comment: "") + " " + NSLocalizedString("l.deviceStateClosedString", comment: "")
+                deviceImage = UIImage(named: "DeviceRollerShutterClosedIcon")!
             } else {
-                let textForRollerShutterFirstPart = deviceItem.first!.deviceName + " " + isString + " " + deviceStateOpenedString
-                let textForRollerShutterSecondPart = atString + " " + String(describing: deviceItem.first!.position
-                                                                             ?? 0) + percentString
+                let textForRollerShutterFirstPart = deviceItem!.deviceName + " " + NSLocalizedString("l.isString",
+                                                                                                     comment: "") + " " + NSLocalizedString("l.deviceStateOpenedString", comment: "")
+                let textForRollerShutterSecondPart = NSLocalizedString("l.atString", comment: "") + " " + String(describing: deviceItem!.position
+                                                                                                                 ?? 0) + percentString
                 textForRollerShutter = textForRollerShutterFirstPart + " " + textForRollerShutterSecondPart
-                deviceImage = UIImage(systemName: "rectangle.tophalf.filled")!
+                deviceImage = UIImage(named: "DeviceRollerShutterOpenIcon")!
             }
-        default:
-            print(errorUnknownDeviceString)
         }
     }
 }

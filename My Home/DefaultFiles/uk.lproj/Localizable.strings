@@ -1,0 +1,29 @@
+/* 
+ Localizable.strings
+ My Home
+ 
+ Created by Дмитрий Куприенко on 27.07.2022.
+ 
+ */
+
+"l.errorUnknownDeviceString" = "Помилка: Невідомий пристрій";
+"l.errorNoSliderFoundString" = "Помилка: Слайдер не існує";
+"l.errorNoSwitchFoundString" = "Помилка: Перемикач не існує";
+"l.errorSomethingWentWrongString" = "Помилка: Щось пішло не так, перевірте консоль";
+
+"l.deviceUnknownString" = "Невідомий";
+"l.deviceLightString" = "Лампа";
+"l.deviceHeaterString" = "Обігрівач";
+"l.deviceRollerShutterString" = "Жалюзі";
+
+"l.deviceModeOnString" = "увімкнено";
+"l.deviceModeOffString" = "вимкнено";
+"l.deviceStateOpenedString" = "відчинено";
+"l.deviceStateClosedString" = "зачинено";
+
+"l.onOffLabelString" = "Увімк./Вимк.";
+"l.explanationAnnotationLabelStringLight" = "Потягніть щоб встановити інтенсивність";
+"l.explanationAnnotationLabelStringHeater" = "Крок 0.5°C";
+"l.explanationAnnotationLabelStringRollerShutter" = "Потягніть щоб встановити позицію";
+"l.isString" = "";
+"l.atString" = "на";

@@ -1,0 +1,29 @@
+/* 
+ Localizable.strings
+ My Home
+ 
+ Created by Дмитрий Куприенко on 27.07.2022.
+ 
+ */
+
+"l.errorUnknownDeviceString" = "Ошибка: Неизвестное устройство";
+"l.errorNoSliderFoundString" = "Ошибка: Слайдер не существует";
+"l.errorNoSwitchFoundString" = "Ошибка: Переключатель не существует";
+"l.errorSomethingWentWrongString" = "Ошибка, что-то пошло не так, проверьте консоль";
+
+"l.deviceUnknownString" = "Неизвестен";
+"l.deviceLightString" = "Лампа";
+"l.deviceHeaterString" = "Обогреватель";
+"l.deviceRollerShutterString" = "Жалюзи";
+
+"l.deviceModeOnString" = "включено";
+"l.deviceModeOffString" = "выключено";
+"l.deviceStateOpenedString" = "открыто";
+"l.deviceStateClosedString" = "закрыто";
+
+"l.onOffLabelString" = "Вкл./Выкл.";
+"l.explanationAnnotationLabelStringLight" = "Поятните чтобы установить интенсивность";
+"l.explanationAnnotationLabelStringHeater" = "Шаг 0.5°C";
+"l.explanationAnnotationLabelStringRollerShutter" = "Потяните чтобы установить позицию";
+"l.isString" = "";
+"l.atString" = "на";
