@@ -12,7 +12,9 @@ class HomePageViewController: UIViewController {
     let homePageTableView = UITableView.init(frame: .zero,
                                              style: .insetGrouped)
     let homePageViewModel = HomePageViewModel()
-    let controlPageViewModel = ControlPageViewModel()
+    let lightControlPageViewModel = LightControlPageViewModel()
+    let heaterControlPageViewModel = HeaterControlPageViewModel()
+    let rollerShutterControlPageViewModel = RollerShutterControlPageViewModel()
     
     override func viewDidLoad() {
         
@@ -78,23 +80,35 @@ extension HomePageViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let controlPage = ControlPageViewController()
-        controlPage.controlPageViewModel = self.controlPageViewModel
-        controlPage.homePageViewModel = self.homePageViewModel
-        controlPage.controlPageViewModel.targetDeviceID = homePageViewModel.devicesArray[indexPath.row].id
+        let lightControlPage = LightControlPageViewController()
+        let heaterControlPage = HeaterControlPageViewController()
+        let rollerShutterControlPage = RollerShutterControlPageViewController()
         
         switch homePageViewModel.devicesArray[indexPath.row].productType {
         case .light:
-            controlPage.controlPageViewModel.lightsArray = homePageViewModel.lightsArray
-            controlPage.controlPageViewModel.targetDeviceType = deviceLightString
+            lightControlPage.lightControlPageViewModel = self.lightControlPageViewModel
+            lightControlPage.homePageViewModel = self.homePageViewModel
+            lightControlPage.lightControlPageViewModel.targetDeviceID = homePageViewModel.devicesArray[indexPath.row].id
+            lightControlPage.lightControlPageViewModel.lightsArray = homePageViewModel.lightsArray
+            lightControlPage.lightControlPageViewModel.targetDeviceType = deviceLightString
+            self.present(lightControlPage, animated: true)
+            lightControlPage.delegate = self
         case .heater:
-            controlPage.controlPageViewModel.heatersArray = homePageViewModel.heatersArray
-            controlPage.controlPageViewModel.targetDeviceType = deviceHeaterString
+            heaterControlPage.heaterControlPageViewModel = self.heaterControlPageViewModel
+            heaterControlPage.homePageViewModel = self.homePageViewModel
+            heaterControlPage.heaterControlPageViewModel.targetDeviceID = homePageViewModel.devicesArray[indexPath.row].id
+            heaterControlPage.heaterControlPageViewModel.heatersArray = homePageViewModel.heatersArray
+            heaterControlPage.heaterControlPageViewModel.targetDeviceType = deviceHeaterString
+            self.present(heaterControlPage, animated: true)
+            heaterControlPage.delegate = self
         case .rollerShutter:
-            controlPage.controlPageViewModel.rollerShuttersArray = homePageViewModel.rollerShuttersArray
-            controlPage.controlPageViewModel.targetDeviceType = deviceRollerShutterString
+            rollerShutterControlPage.rollerShutterControlPageViewModel = self.rollerShutterControlPageViewModel
+            rollerShutterControlPage.homePageViewModel = self.homePageViewModel
+            rollerShutterControlPage.rollerShutterControlPageViewModel.targetDeviceID = homePageViewModel.devicesArray[indexPath.row].id
+            rollerShutterControlPage.rollerShutterControlPageViewModel.rollerShuttersArray = homePageViewModel.rollerShuttersArray
+            rollerShutterControlPage.rollerShutterControlPageViewModel.targetDeviceType = deviceRollerShutterString
+            self.present(rollerShutterControlPage, animated: true)
+            rollerShutterControlPage.delegate = self
         }
-        controlPage.delegate = self
-        self.present(controlPage, animated: true)
     }
 }

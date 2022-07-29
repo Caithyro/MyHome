@@ -64,7 +64,7 @@ class HomePageTableViewCell: UITableViewCell {
     private func createDeviceLabel() {
         
         let defaultSpacing = 8
-        let fontSize = 15
+        let fontSize = 14
         self.addSubview(deviceLabel)
         self.deviceLabel.translatesAutoresizingMaskIntoConstraints = false
         self.deviceLabel.topAnchor.constraint(equalTo: self.topAnchor,
