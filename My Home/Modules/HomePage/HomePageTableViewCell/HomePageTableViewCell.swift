@@ -10,8 +10,8 @@ import UIKit
 class HomePageTableViewCell: UITableViewCell {
     
     var deviceItem: Device?
-    
     var homePageViewModel: HomePageViewModel!
+    
     private var textForLights = String()
     private var textForHeater = String()
     private var textForRollerShutter = String()

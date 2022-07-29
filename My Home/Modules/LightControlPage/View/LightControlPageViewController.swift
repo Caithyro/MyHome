@@ -101,16 +101,7 @@ class LightControlPageViewController: UIViewController {
         let topSpacing = 56
         let rightSpacing = -8
         view.addSubview(explanationAnnotationLabel)
-        switch device {
-        case deviceLightString:
-            explanationAnnotationLabel.text = NSLocalizedString("l.explanationAnnotationLabelStringLight", comment: "")
-        case deviceHeaterString:
-            explanationAnnotationLabel.text = NSLocalizedString("l.explanationAnnotationLabelStringHeater", comment: "")
-        case deviceRollerShutterString:
-            explanationAnnotationLabel.text = NSLocalizedString("l.explanationAnnotationLabelStringRollerShutter", comment: "")
-        default:
-            print(NSLocalizedString("l.deviceUnknownString", comment: ""))
-        }
+        explanationAnnotationLabel.text = NSLocalizedString("l.explanationAnnotationLabelStringLight", comment: "")
         explanationAnnotationLabel.textColor = .systemGray
         explanationAnnotationLabel.font = .systemFont(ofSize: CGFloat(fontSize))
         explanationAnnotationLabel.translatesAutoresizingMaskIntoConstraints = false
